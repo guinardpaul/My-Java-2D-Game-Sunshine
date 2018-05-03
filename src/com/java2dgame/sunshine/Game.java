@@ -24,18 +24,19 @@ public class Game extends Canvas implements Runnable {
 	/** TITLE */
 	public static final String TITLE = "Sunshine";
 
-	/** Diplay thread */
+	/** Display thread */
 	private Thread thread;
 	/** JFrame */
 	private JFrame frame;
 	/** Running */
 	private boolean running = false;
+
 	/** Screen */
 	private Screen screen;
 
 	/** Buffered image */
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-	/** Pixels of Buffered image */
+	/** Pixels of the buffered image */
 	public int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 
 	/** Instantiate new Game */
@@ -77,11 +78,11 @@ public class Game extends Canvas implements Runnable {
 		int updates = 0;
 		// Focus window when opened
 		requestFocus();
+		// Game loop
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
-
 			// Update 60 times per second
 			while (delta >= 1) {
 				update();
@@ -91,6 +92,7 @@ public class Game extends Canvas implements Runnable {
 			render();
 			frames++;
 
+			// Display ups and fps to title
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 				System.out.println(updates + " ups, " + frames + " fps");
@@ -114,11 +116,8 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 
-		// screen.clear();
-		// int xScroll = player.x - screen.width / 2;
-		// int yScroll = player.y - screen.height / 2;
-		// level.render(xScroll, yScroll, screen);
-		// player.render(screen);
+		screen.clear();
+		screen.render();
 
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
