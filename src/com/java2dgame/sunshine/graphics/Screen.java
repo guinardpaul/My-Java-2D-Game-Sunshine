@@ -26,20 +26,23 @@ public class Screen {
 		}
 	}
 
-	public void render() {
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				// (x + y * width) way to convert coordinates to int[]
-				int tileIndex = (x / 16) + (y / 16) * 64;
-				pixels[x + y * width] = tiles[tileIndex];
-			}
-		}
-	}
-
 	/** Clear pixels of the screen */
 	public void clear() {
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = 0;
+		}
+	}
+
+	/** Render screen */
+	public void render(int xOffset, int yOffset) {
+		for (int y = 0; y < height; y++) {
+			int yRender = y + yOffset;
+			for (int x = 0; x < width; x++) {
+				int xRender = x + xOffset;
+				// (x + y * width) way to convert coordinates to int[]
+				int tileIndex = (xRender >> 4) + (yRender >> 4) * 64;
+				pixels[x + y * width] = tiles[tileIndex];
+			}
 		}
 	}
 

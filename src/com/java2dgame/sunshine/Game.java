@@ -11,6 +11,7 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 
 import com.java2dgame.sunshine.graphics.Screen;
+import com.java2dgame.sunshine.input.Keyboard;
 
 public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
@@ -33,6 +34,11 @@ public class Game extends Canvas implements Runnable {
 
 	/** Screen */
 	private Screen screen;
+	/** Keyboard input */
+	private Keyboard keyInput;
+
+	/** Temporary x, y value for moving the map */
+	private int x = 0, y = 0;
 
 	/** Buffered image */
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -48,6 +54,9 @@ public class Game extends Canvas implements Runnable {
 
 		screen = new Screen(WIDTH, HEIGHT);
 		frame = new JFrame();
+		keyInput = new Keyboard();
+
+		addKeyListener(keyInput);
 	}
 
 	/** Start the game */
@@ -105,7 +114,20 @@ public class Game extends Canvas implements Runnable {
 
 	/** Update method */
 	public void update() {
-
+		// KeyEvent update
+		keyInput.update();
+		if (keyInput.up) {
+			y--;
+		}
+		if (keyInput.down) {
+			y++;
+		}
+		if (keyInput.left) {
+			x--;
+		}
+		if (keyInput.right) {
+			x++;
+		}
 	}
 
 	/** Render method */
@@ -117,7 +139,8 @@ public class Game extends Canvas implements Runnable {
 		}
 
 		screen.clear();
-		screen.render();
+
+		screen.render(x, y);
 
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
